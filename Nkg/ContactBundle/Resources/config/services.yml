@@ -1,0 +1,8 @@
+services:
+    nkg.contact:
+        class: %nkg_contact.contact_service%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @session
+            - %nkg_contact.contact_class%
+            - %nkg_contact.contact_repository%

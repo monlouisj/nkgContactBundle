@@ -1,0 +1,41 @@
+services:
+    sonata.admin.contact:
+        class: Nkg\ContactBundle\Admin\ContactAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contacts", label: "Contacts" }
+        arguments:
+            - ~
+            - %nkg_contact.contact_class%
+            - ~
+        calls:
+            - [ setTranslationDomain, [NkgContactBundle]]
+    sonata.admin.localisation:
+        class: Nkg\ContactBundle\Admin\LocalisationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contacts", label: "Localisation" }
+        arguments:
+            - ~
+            - Nkg\ContactBundle\Entity\Localisation
+            - ~
+        calls:
+            - [ setTranslationDomain, [NkgContactBundle]]
+    sonata.admin.country:
+        class: Nkg\ContactBundle\Admin\CountryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contacts", label: "Country" }
+        arguments:
+            - ~
+            - Nkg\ContactBundle\Entity\Country
+            - ~
+        calls:
+            - [ setTranslationDomain, [NkgContactBundle]]
+    sonata.admin.interest:
+        class: Nkg\ContactBundle\Admin\InterestAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Contacts", label: "Interests" }
+        arguments:
+            - ~
+            - Nkg\ContactBundle\Entity\Interest
+            - ~
+        calls:
+            - [ setTranslationDomain, [NkgContactBundle]]

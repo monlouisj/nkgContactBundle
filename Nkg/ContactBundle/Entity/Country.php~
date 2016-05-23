@@ -1,0 +1,250 @@
+<?php
+
+namespace Nkg\ContactBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Country
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Nkg\ContactBundle\Entity\CountryRepository")
+ */
+class Country {
+
+
+	/**
+	 * @var integer
+	 *
+	 * @ORM\Column(name="id", type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+	/**
+	 * @ORM\Column(name="label", type="string", length=64)
+	 */
+	protected $label;
+
+	/**
+	 * @ORM\Column(name="slug", type="string", length=64, unique=true, nullable=true)
+	 */
+	protected $slug;
+
+	/**
+	 * @ORM\Column(name="active", type="boolean")
+	 */
+	protected $active = true;
+
+	/**
+	 * Get id
+	 *
+	 * @return integer
+	 */
+	public function getId() {
+		return $this->id;
+	}
+
+	/**
+	 * Set active
+	 *
+	 * @param boolean $active
+	 * @return Publish
+	 */
+	public function setActive($active) {
+		$this->active = $active;
+
+		return $this;
+	}
+
+	/**
+	 * Get active
+	 *
+	 * @return boolean
+	 */
+	public function getActive() {
+		return $this->active;
+	}
+
+	/**
+	 * Set label
+	 *
+	 * @param string $label
+	 * @return MenuItem
+	 */
+	public function setLabel($label) {
+		$this->label = $label;
+
+		return $this;
+	}
+
+	/**
+	 * Get label
+	 *
+	 * @return string
+	 */
+	public function getLabel() {
+		return $this->label;
+	}
+
+	/**
+	 * Set slug
+	 *
+	 * @param string $slug
+	 * @return MenuItem
+	 */
+	public function setSlug($slug) {
+		$this->slug = $slug;
+
+		return $this;
+	}
+
+	/**
+	 * Get slug
+	 *
+	 * @return string
+	 */
+	public function getSlug() {
+		return $this->slug;
+	}
+
+	public function __toString() {
+		return $this->label;
+	}
+
+
+	/**
+	 * @ORM\Column(name="numero", type="string", length=10)
+	 */
+	protected $numero;
+
+	/**
+	 * @ORM\Column(name="fuseau", type="string", length=64)
+	 */
+	protected $fuseau;
+
+	/**
+	 *
+	 * @ORM\OneToMany(targetEntity="Localisation", mappedBy="departement", cascade={"persist"})
+	 */
+	protected $communes;
+
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		$this->communes = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+
+	/**
+	 * Add communes
+	 *
+	 * @param \Nkg\ContactBundle\Entity\Localisation $communes
+	 * @return Categorie
+	 */
+	public function addLocalisation(\Nkg\ContactBundle\Entity\Localisation $communes) {
+		$communes->setCountry($this);
+		$this->communes[] = $communes;
+
+		return $this;
+	}
+
+	/**
+	 * Remove communes
+	 *
+	 * @param \Nkg\ContactBundle\Entity\Localisation $communes
+	 */
+	public function removeLocalisation(\Nkg\ContactBundle\Entity\Localisation $communes) {
+		$communes->setCountry(null);
+		$this->communes->removeElement($communes);
+	}
+
+	/**
+	 * Get communes
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getLocalisation() {
+		return $this->communes;
+	}
+
+	/**
+	 * Set numero
+	 *
+	 * @param string $numero
+	 * @return Country
+	 */
+	public function setNumero($numero) {
+		$this->numero = $numero;
+
+		return $this;
+	}
+
+	/**
+	 * Get numero
+	 *
+	 * @return string
+	 */
+	public function getNumero() {
+		return $this->numero;
+	}
+
+	/**
+	 * Set fuseau
+	 *
+	 * @param string $fuseau
+	 * @return Country
+	 */
+	public function setFuseau($fuseau) {
+		$this->fuseau = $fuseau;
+
+		return $this;
+	}
+
+	/**
+	 * Get fuseau
+	 *
+	 * @return string
+	 */
+	public function getFuseau() {
+		return $this->fuseau;
+	}
+
+
+    /**
+     * Add communes
+     *
+     * @param \Nkg\ContactBundle\Entity\Localisation $communes
+     * @return Country
+     */
+    public function addLocalisation(\Nkg\ContactBundle\Entity\Localisation $communes)
+    {
+        $this->communes[] = $communes;
+
+        return $this;
+    }
+
+    /**
+     * Remove communes
+     *
+     * @param \Nkg\ContactBundle\Entity\Localisation $communes
+     */
+    public function removeLocalisation(\Nkg\ContactBundle\Entity\Localisation $communes)
+    {
+        $this->communes->removeElement($communes);
+    }
+
+		public function __toArray()
+		{
+			$array = array();
+			$array['id'] = $this->id;
+			$array['label'] = $this->label;
+			$array['slug'] = $this->slug;
+			$array['active'] = $this->active;
+			$array['numero'] = $this->numero;
+			$array['fuseau'] = $this->fuseau;
+			$array['communes'] = $this->communes;
+			return $array;
+		}
+}

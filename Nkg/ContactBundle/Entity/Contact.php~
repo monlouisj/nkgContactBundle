@@ -1,0 +1,208 @@
+<?php
+namespace Nkg\ContactBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Contact
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Nkg\ContactBundle\Entity\ContactRepository")
+ * @UniqueEntity(fields="email", message="Cette adresse email a déja été enregistrée", groups={"registration"})
+ * @UniqueEntity(fields="phone", message="Ce numéro de téléphone a déja été enregistré", groups={"registration"})
+ */
+class Contact
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    public $id;
+
+    /**
+     * @var string
+     * @Assert\Length(
+		 *      min = "2",
+		 *      max = "50",
+		 *      minMessage = "Votre prénom doit faire au moins {{ limit }} caractères",
+		 *      maxMessage = "Votre prénom ne peut pas être plus long que {{ limit }} caractères"
+		 * )
+     * @ORM\Column(name="firstname", type="string", length=255)
+     */
+    private $firstname;
+
+    /**
+     * @var string
+     * @Assert\Length(
+		 *      min = "2",
+		 *      max = "50",
+		 *      minMessage = "Votre nom doit faire au moins {{ limit }} caractères",
+		 *      maxMessage = "Votre nom ne peut pas être plus long que {{ limit }} caractères"
+		 * )
+     * @ORM\Column(name="lastname", type="string", length=255)
+     */
+    private $lastname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Assert\Email(
+		 *     message = "'{{ value }}' n'est pas un email valide.",
+		 *     checkMX = false
+		 * )
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_uid", type="string", length=255, nullable=true)
+     */
+    private $facebookUid;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_name", type="string", length=255, nullable=true)
+     */
+    private $facebookName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitter_uid", type="string", length=255, nullable=true)
+     */
+    private $twitterUid;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitter_name", type="string", length=255, nullable=true)
+     */
+    private $twitterName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=20, nullable=true)
+     */
+    private $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile", type="string", length=20, nullable=true)
+     */
+    private $mobile;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="gender", type="boolean", nullable=true)
+     * @Assert\NotNull()
+     */
+    private $gender;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="optin", type="boolean", nullable=true)
+     */
+    private $optin;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="optinpartenr", type="boolean", nullable=true)
+     */
+    private $optinpartenr;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateofbirth", type="datetime", nullable=true)
+     * @Assert\Date()
+     */
+    private $dateofbirth;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="createdat", type="datetime", nullable=true)
+     */
+    private $createdat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", nullable=true)
+     */
+    private $country;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sponsor", type="integer", nullable=true)
+     */
+
+     /**
+ 		 * @ORM\ManyToOne(targetEntity="Contact")
+ 		 * @ORM\JoinColumn(name="sponsor_id", referencedColumnName="id", nullable=true)
+ 		 */
+     private $sponsor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="localisation", type="string", length=255, nullable=true)
+     */
+    private $localisation;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="participations", type="integer", nullable=true)
+     */
+    private $participations;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="succes", type="boolean", nullable=true)
+     */
+    private $succes;
+
+    /**
+		 * @ORM\ManyToOne(targetEntity="Nkg\ContactBundle\Entity\Profession", cascade={"persist"})
+		 * @ORM\JoinColumn(name="profession_id", referencedColumnName="id", nullable=false)
+		 * @Assert\NotNull()
+		 */
+		protected $profession;
+
+    /**
+		 * @ORM\ManyToMany(targetEntity="Nkg\ContactBundle\Entity\Interest", cascade={"persist"})
+		 */
+		private $interests;
+
+    public function __construct() {
+			$this->interests = new ArrayCollection();
+		}
+
+    public function __toString() {
+			return $this->firstname . " " . $this->lastname;
+		}
+}
